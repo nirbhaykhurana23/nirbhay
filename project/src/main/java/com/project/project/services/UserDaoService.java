@@ -12,6 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -146,6 +147,7 @@ public class UserDaoService{
         return userRepository.findSellers();
     }
 
+    @Transactional
     public String confirmUserAccount(String confirmationToken){
         ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
 
@@ -159,6 +161,7 @@ public class UserDaoService{
             User user = userRepository.findByEmailIgnoreCase(token.getUser().getEmail());
             user.setIs_enabled(true);
             userRepository.save(user);
+            confirmationTokenRepository.delConfirmationToken(confirmationToken);
             return "Your account is activated" ;
         }
 

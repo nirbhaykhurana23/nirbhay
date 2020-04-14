@@ -12,6 +12,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -47,6 +48,7 @@ public class ForgotPasswordService {
         return "A link has been sent to your email for password reset.";
     }
 
+    @Transactional
     public String updatePassword(String resetToken, ForgotPasswordDto forgotPasswordDto){
         ResetPasswordToken resetPasswordToken= resetPasswordRepository.findByToken(resetToken);
         if(resetPasswordToken==null) {
@@ -55,6 +57,7 @@ public class ForgotPasswordService {
 
         Date presentDate = new Date();
         if (resetPasswordToken.getExpiryDate().getTime() - presentDate.getTime() <= 0){
+            resetPasswordRepository.delToken(resetToken);
             throw new TokenExpiredException("Token has been expired, request for new Token via Forgot Password Link");
         }
 
@@ -73,6 +76,9 @@ public class ForgotPasswordService {
             mailMessage.setText("Your password has been changed successfully!!");
 
             emailService.sendEmail(mailMessage);
+
+            resetPasswordRepository.delToken(resetToken);
+
             return "Password updated successfully!!!";
         }
 
