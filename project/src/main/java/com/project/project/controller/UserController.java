@@ -1,10 +1,13 @@
 package com.project.project.controller;
 
+import com.project.project.Exceptions.UserNotFoundException;
 import com.project.project.entities.*;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.UserRepository;
+import com.project.project.services.AccountUnlockService;
 import com.project.project.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -27,6 +30,9 @@ public class UserController {
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
+
+    @Autowired
+    private AccountUnlockService accountUnlockService;
 
     @GetMapping("/")
     public String index(){
@@ -92,5 +98,20 @@ public class UserController {
         String message= userDaoService.confirmUserAccount(confirmationToken);
         return message;
     }
+
+    @GetMapping("/account-unlock/{username}")
+    public String unlockAccount(@PathVariable String username){
+        String message = accountUnlockService.unlockAccount(username);
+        return message;
+    }
+
+    @GetMapping("/do-unlock")
+    public String unlockAccountSuccess(@RequestParam("username") String username)
+    {
+        String message = accountUnlockService.unlockAccountSuccess(username);
+        return message;
+    }
+
+
 
 }

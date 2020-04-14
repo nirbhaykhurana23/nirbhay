@@ -35,17 +35,25 @@ public class ForgotPasswordService {
             throw new UserNotFoundException("User not found");
 
         ResetPasswordToken resetPasswordToken = new ResetPasswordToken();
-        resetPasswordToken = new ResetPasswordToken(user);
-        resetPasswordRepository.save(resetPasswordToken);
 
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Reset your password");
-        mailMessage.setText("To reset your password , please click here "
-                +"http://localhost:8080/reset-password?token="+resetPasswordToken.getToken());
+        resetPasswordToken = resetPasswordRepository.findByUser(user);
+        if(resetPasswordToken!=null) {
+            resetPasswordToken.calculateToken();
+            resetPasswordRepository.save(resetPasswordToken);
+        }
 
-        emailService.sendEmail(mailMessage);
-        return "A link has been sent to your email for password reset.";
+        else {
+            resetPasswordToken = new ResetPasswordToken(user);
+            resetPasswordRepository.save(resetPasswordToken);
+        }
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Reset your password");
+            mailMessage.setText("To reset your password , please click here "
+                    +"http://localhost:8080/reset-password?token="+resetPasswordToken.getToken());
+
+            emailService.sendEmail(mailMessage);
+            return "A link has been sent to your email for password reset.";
     }
 
     @Transactional

@@ -22,6 +22,7 @@ public class User {
     private String password;
     private Boolean is_deleted;
     private Boolean is_enabled;
+    private Boolean is_nonLocked;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -34,6 +35,9 @@ public class User {
     @JsonIgnore
     private List<Role> roles;
 
+    @JsonIgnore
+    private Integer attempts=0;
+
     public User(){}
 
     public User(User user){
@@ -44,6 +48,7 @@ public class User {
         this.is_deleted=user.is_deleted;
         this.is_enabled =user.is_enabled;
         this.roles=user.roles;
+        this.is_nonLocked= user.is_nonLocked;
 
     }
 
@@ -135,6 +140,21 @@ public class User {
         this.roles = roles;
     }
 
+    public Integer getAttempts() {
+        return attempts;
+    }
+
+    public void setAttempts(Integer attempts) {
+        this.attempts = attempts;
+    }
+
+    public Boolean getIs_nonLocked() {
+        return is_nonLocked;
+    }
+
+    public void setIs_nonLocked(Boolean is_nonLocked) {
+        this.is_nonLocked = is_nonLocked;
+    }
 
     /*public void addRole(Role role){
         if(roles==null)
@@ -152,20 +172,5 @@ public class User {
         }
     }*/
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "user_id=" + user_id +
-                ", username='" + username + '\'' +
-                ", first_name='" + first_name + '\'' +
-                ", middle_name='" + middle_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", is_deleted=" + is_deleted +
-                ", is_active=" + is_enabled +
-                ", addresses=" + addresses +
-                ", roles=" + roles +
-                '}';
-    }
+
 }

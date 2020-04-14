@@ -69,6 +69,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/{customer_user_id}/order/{cart_id}").hasAnyRole("CUSTOMER")
                 .antMatchers("/forgot-password").permitAll()
                 .antMatchers("/reset-password").permitAll()
+                .antMatchers("/account-unlock/{username}").permitAll()
+                .antMatchers("/do-unlock").permitAll()
 
                 .anyRequest().authenticated()
                 .and()

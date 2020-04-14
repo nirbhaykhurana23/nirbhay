@@ -43,7 +43,7 @@ public class AppUser extends User implements UserDetails
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return super.getIs_nonLocked();
     }
 
     @Override

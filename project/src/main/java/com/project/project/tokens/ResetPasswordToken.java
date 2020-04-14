@@ -80,5 +80,15 @@ public class ResetPasswordToken {
         this.expiryDate = expiryDate;
     }
 
+    public void calculateToken(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+        createdDate = new Date(calendar.getTime().getTime());
+        calendar.add(Calendar.MINUTE,10);
+        expiryDate = new Date(calendar.getTime().getTime());
+        token = UUID.randomUUID().toString();
+
+    }
+
 
 }

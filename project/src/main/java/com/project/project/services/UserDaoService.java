@@ -40,8 +40,14 @@ public class UserDaoService{
         User user = userRepository.findByUsername(username);
         System.out.println(user);
         if (username != null) {
+
+/*            if(user.getAttempts()>=3){
+                user.setIs_nonLocked(false);
+                return new AppUser(user);
+            }*/
             return new AppUser(user);
-        } else {
+        }
+        else {
             throw new RuntimeException();
         }
 
@@ -76,6 +82,7 @@ public class UserDaoService{
 
             customer.setIs_enabled(false);
             customer.setIs_deleted(false);
+            customer.setIs_nonLocked(true);
 
             userRepository.save(customer);
 
@@ -124,6 +131,7 @@ public class UserDaoService{
 
             seller.setIs_enabled(false);
             seller.setIs_deleted(false);
+            seller.setIs_nonLocked(true);
 
             userRepository.save(seller);
 
