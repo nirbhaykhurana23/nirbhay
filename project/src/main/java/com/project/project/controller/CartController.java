@@ -14,7 +14,7 @@ public class CartController {
     @Autowired
     private CartDaoService cartDaoService;
 
-    @PostMapping("{customer_user_id}/add-to-cart/{productVariation_id}")
+    @PostMapping("add-to-cart/{customer_user_id}/{productVariation_id}")
     public void addToCart(@PathVariable Integer customer_user_id, @RequestBody Cart cart,@PathVariable Integer productVariation_id){
         Cart cart1= cartDaoService.addToCart(customer_user_id, cart, productVariation_id);
     }

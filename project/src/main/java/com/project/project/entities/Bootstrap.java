@@ -29,9 +29,9 @@ public class Bootstrap implements ApplicationRunner {
         admin.setId(1);
         User user = new User();
         user.setUsername("admin");
-        user.setPassword(passwordEncoder.encode("123"));
+        user.setPassword(passwordEncoder.encode("Nirbhay@23"));
         user.setEmail("admin@tothenew.com");
-        user.setFirst_name("admin");
+        user.setFirstName("admin");
         user.setIs_enabled(true);
         user.setIs_nonLocked(true);
         user.setIs_deleted(false);

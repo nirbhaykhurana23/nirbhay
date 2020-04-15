@@ -1,6 +1,7 @@
 package com.project.project.entities;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class Cart {
@@ -9,7 +10,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_user_id")
     private Customer customer;
 

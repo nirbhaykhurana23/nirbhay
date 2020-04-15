@@ -1,6 +1,8 @@
 package com.project.project.controller;
 
 import com.project.project.Exceptions.UserNotFoundException;
+import com.project.project.dto.CustomerRegisterDto;
+import com.project.project.dto.SellerRegisterDto;
 import com.project.project.entities.*;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.UserRepository;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -30,9 +33,6 @@ public class UserController {
 
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
-
-    @Autowired
-    private AccountUnlockService accountUnlockService;
 
     @GetMapping("/")
     public String index(){
@@ -71,8 +71,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/customer-registration")
-    public String createCustomer(@RequestBody Customer customer) {
-        String message = userDaoService.saveNewCustomer(customer);
+    public String createCustomer(@Valid @RequestBody CustomerRegisterDto customerRegisterDto) {
+        String message = userDaoService.saveNewCustomer(customerRegisterDto);
         return message;
     }
 
@@ -82,8 +82,8 @@ public class UserController {
     }
 
     @PostMapping(path = "/seller-registration")
-    public String createSeller(@RequestBody Seller seller) {
-        String message = userDaoService.saveNewSeller(seller);
+    public String createSeller(@Valid @RequestBody SellerRegisterDto sellerRegisterDto) {
+        String message = userDaoService.saveNewSeller(sellerRegisterDto);
         return message;
     }
 
@@ -96,19 +96,6 @@ public class UserController {
     public String confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
         String message= userDaoService.confirmUserAccount(confirmationToken);
-        return message;
-    }
-
-    @GetMapping("/account-unlock/{username}")
-    public String unlockAccount(@PathVariable String username){
-        String message = accountUnlockService.unlockAccount(username);
-        return message;
-    }
-
-    @GetMapping("/do-unlock")
-    public String unlockAccountSuccess(@RequestParam("username") String username)
-    {
-        String message = accountUnlockService.unlockAccountSuccess(username);
         return message;
     }
 

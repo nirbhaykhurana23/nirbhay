@@ -1,12 +1,15 @@
 package com.project.project.services;
 
 import com.project.project.Exceptions.TokenExpiredException;
+import com.project.project.dto.CustomerRegisterDto;
+import com.project.project.dto.SellerRegisterDto;
 import com.project.project.entities.*;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.RoleRepository;
 import com.project.project.repositories.UserRepository;
 import com.project.project.security.AppUser;
 import com.project.project.tokens.ConfirmationToken;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -57,14 +60,17 @@ public class UserDaoService{
         return (List<User>) userRepository.findAll();
     }
 
-    public String saveNewCustomer(Customer customer) {
+    public String saveNewCustomer(CustomerRegisterDto customerRegisterDto) {
 
-        User existingUser = userRepository.findByEmailIgnoreCase(customer.getEmail());
+        User existingUser = userRepository.findByEmailIgnoreCase(customerRegisterDto.getEmail());
         if(existingUser != null)
         {
             return "This email already exists";
         }
         else {
+            ModelMapper modelMapper = new ModelMapper();
+            Customer customer= modelMapper.map(customerRegisterDto, Customer.class);
+
             String password=customer.getPassword();
             customer.setPassword(passwordEncoder.encode(password));
 
@@ -106,14 +112,18 @@ public class UserDaoService{
         return userRepository.findCustomers();
     }
 
-    public String saveNewSeller(Seller seller) {
+    public String saveNewSeller(SellerRegisterDto sellerRegisterDto) {
 
-        User existingUser = userRepository.findByEmailIgnoreCase(seller.getEmail());
+        User existingUser = userRepository.findByEmailIgnoreCase(sellerRegisterDto.getEmail());
         if(existingUser != null)
         {
             return "This email already exists";
         }
         else {
+
+            ModelMapper modelMapper = new ModelMapper();
+            Seller seller= modelMapper.map(sellerRegisterDto, Seller.class);
+
             String password=seller.getPassword();
             seller.setPassword(passwordEncoder.encode(password));
 

@@ -11,13 +11,13 @@ public class Customer extends User {
 
     public Customer(){}
 
-    private Integer contact;
+    private String contact;
 
-    public Integer getContact() {
+    public String getContact() {
         return contact;
     }
 
-    public void setContact(Integer contact) {
+    public void setContact(String contact) {
         this.contact = contact;
     }
 }

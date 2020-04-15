@@ -9,10 +9,10 @@ import java.util.Set;
 @PrimaryKeyJoinColumn(name = "user_id")
 public class Seller extends User {
 
-    private Integer gst;
+    private String gst;
 
     private String company_name;
-    private Integer company_contact;
+    private String company_contact;
 
 /*    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "seller_user_id")
@@ -20,11 +20,11 @@ public class Seller extends User {
 
     public Seller(){}
 
-    public Integer getGst() {
+    public String getGst() {
         return gst;
     }
 
-    public void setGst(Integer gst) {
+    public void setGst(String gst) {
         this.gst = gst;
     }
 
@@ -36,11 +36,11 @@ public class Seller extends User {
         this.company_name = company_name;
     }
 
-    public Integer getCompany_contact() {
+    public String getCompany_contact() {
         return company_contact;
     }
 
-    public void setCompany_contact(Integer company_contact) {
+    public void setCompany_contact(String company_contact) {
         this.company_contact = company_contact;
     }
 /*
