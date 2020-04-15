@@ -33,6 +33,8 @@ public class Bootstrap implements ApplicationRunner {
         user.setEmail("admin@tothenew.com");
         user.setFirst_name("admin");
         user.setIs_enabled(true);
+        user.setIs_nonLocked(true);
+        user.setIs_deleted(false);
         user.setRoles(Arrays.asList(admin));
         userRepository.save(user);
 

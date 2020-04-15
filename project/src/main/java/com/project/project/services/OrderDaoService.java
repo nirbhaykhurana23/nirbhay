@@ -69,6 +69,9 @@ public class OrderDaoService {
 
         orderProduct.setPrice(product_variation.getPrice());
 
+        Integer amount= orderProduct.getPrice() * cart.getQuantity();
+        orders.setAmount_paid(amount);
+
         orderProductRepository.save(orderProduct);
 
         return orders;
