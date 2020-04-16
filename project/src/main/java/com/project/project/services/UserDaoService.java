@@ -1,17 +1,21 @@
 package com.project.project.services;
 
 import com.project.project.Exceptions.TokenExpiredException;
+import com.project.project.Exceptions.UserNotFoundException;
 import com.project.project.dto.CustomerRegisterDto;
 import com.project.project.dto.SellerRegisterDto;
 import com.project.project.entities.*;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.RoleRepository;
+import com.project.project.repositories.SellerRepository;
 import com.project.project.repositories.UserRepository;
 import com.project.project.security.AppUser;
 import com.project.project.tokens.ConfirmationToken;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +38,9 @@ public class UserDaoService{
     @Autowired
     private EmailSenderService emailSenderService;
 
+    @Autowired
+    private SellerRepository sellerRepository;
+
     private static List<Customer> customerList=new ArrayList<>();
     private static List<Seller> sellerList=new ArrayList<>();
 
@@ -54,10 +61,6 @@ public class UserDaoService{
             throw new RuntimeException();
         }
 
-    }
-
-    public List<User> findAllUsers(){
-        return (List<User>) userRepository.findAll();
     }
 
     public String saveNewCustomer(CustomerRegisterDto customerRegisterDto) {
@@ -88,6 +91,7 @@ public class UserDaoService{
 
             customer.setIs_enabled(false);
             customer.setIs_deleted(false);
+            customer.setIs_active(true);
             customer.setIs_nonLocked(true);
 
             userRepository.save(customer);
@@ -106,10 +110,6 @@ public class UserDaoService{
 
             return "Registeration successful";
         }
-    }
-
-    public List<Customer> findAllCustomers(){
-        return userRepository.findCustomers();
     }
 
     public String saveNewSeller(SellerRegisterDto sellerRegisterDto) {
@@ -140,12 +140,13 @@ public class UserDaoService{
             seller.setRoles(Arrays.asList(role));
 
             seller.setIs_enabled(false);
+            seller.setIs_active(true);
             seller.setIs_deleted(false);
             seller.setIs_nonLocked(true);
 
             userRepository.save(seller);
 
-            ConfirmationToken confirmationToken = new ConfirmationToken(seller);
+            /*ConfirmationToken confirmationToken = new ConfirmationToken(seller);
 
             confirmationTokenRepository.save(confirmationToken);
 
@@ -155,14 +156,38 @@ public class UserDaoService{
             mailMessage.setText("To activate your account, please click here : "
                     +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
 
+            emailSenderService.sendEmail(mailMessage);*/
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(seller.getEmail());
+            mailMessage.setSubject("Complete Registration");
+            mailMessage.setText("Registration successful. Admin will enable your account in some time.");
             emailSenderService.sendEmail(mailMessage);
 
-            return "Registeration successful";
+            return "Registration successful";
         }
     }
 
-    public List<Seller> findAllSellers(){
-        return userRepository.findSellers();
+    @Transactional
+    public String enableSellerAccount(Integer sellerId){
+        Optional<Seller> seller = sellerRepository.findById(sellerId);
+        if (seller.isPresent()){
+            Seller seller1= new Seller();
+            seller1= seller.get();
+
+            seller1.setIs_enabled(true);
+            userRepository.save(seller1);
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(seller1.getEmail());
+            mailMessage.setSubject("Account Enabled");
+            mailMessage.setText("Your account has been enabled by admin.");
+            emailSenderService.sendEmail(mailMessage);
+
+            return "Seller enabled successfully";
+        }
+        else
+            throw new UserNotFoundException("Seller not found");
     }
 
     @Transactional
@@ -182,7 +207,22 @@ public class UserDaoService{
             confirmationTokenRepository.delConfirmationToken(confirmationToken);
             return "Your account is activated" ;
         }
+    }
 
+    public Customer getLoggedInCustomer() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+        String username = appUser.getUsername();
+        Customer customer = (Customer) userRepository.findByUsername(username);
+        return customer;
+    }
+
+    public Seller getLoggedInSeller() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = (AppUser) authentication.getPrincipal();
+        String username = appUser.getUsername();
+        Seller seller = (Seller) userRepository.findByUsername(username);
+        return seller;
     }
 
 

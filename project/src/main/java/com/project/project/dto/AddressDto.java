@@ -1,16 +1,6 @@
-package com.project.project.entities;
+package com.project.project.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import javax.persistence.*;
-import java.util.List;
-
-@Entity
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+public class AddressDto {
 
     private String city;
     private String state;
@@ -18,19 +8,6 @@ public class Address {
     private String address_line;
     private Integer zip_code;
     private String label;
-
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getCity() {
         return city;
@@ -78,13 +55,5 @@ public class Address {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

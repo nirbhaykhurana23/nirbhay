@@ -1,5 +1,6 @@
 package com.project.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -8,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonFilter("userFilter")
 public class User {
 
     @Id
@@ -23,6 +25,7 @@ public class User {
     private Boolean is_deleted;
     private Boolean is_enabled;
     private Boolean is_nonLocked;
+    private Boolean is_active;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
@@ -154,6 +157,14 @@ public class User {
 
     public void setIs_nonLocked(Boolean is_nonLocked) {
         this.is_nonLocked = is_nonLocked;
+    }
+
+    public Boolean getIs_active() {
+        return is_active;
+    }
+
+    public void setIs_active(Boolean is_active) {
+        this.is_active = is_active;
     }
 
     /*public void addRole(Role role){

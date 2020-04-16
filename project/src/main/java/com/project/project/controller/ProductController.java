@@ -1,7 +1,10 @@
 package com.project.project.controller;
 
+import com.project.project.entities.Customer;
 import com.project.project.entities.Product;
+import com.project.project.entities.Seller;
 import com.project.project.services.ProductDaoService;
+import com.project.project.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,8 +16,16 @@ public class ProductController {
     @Autowired
     private ProductDaoService productDaoService;
 
-    @PostMapping("/{seller_user_id}/save-product/category/{category_name}")
-    public void saveProduct(@PathVariable Integer seller_user_id,@RequestBody List<Product> product, @PathVariable String category_name){
+    @Autowired
+    private UserDaoService userDaoService;
+
+
+    @PostMapping("/save-product/category/{category_name}")
+    public void saveProduct(@RequestBody List<Product> product, @PathVariable String category_name){
+
+        Seller seller = userDaoService.getLoggedInSeller();
+        Integer seller_user_id = seller.getUser_id();
+
         List<Product> product1= productDaoService.saveNewProduct(seller_user_id, product, category_name);
     }
 

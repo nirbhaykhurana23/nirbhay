@@ -65,38 +65,25 @@ public class UserController {
         return "Logged out successfully";
     }
 
-    @GetMapping("/find-all-users")
-    public List<User> retrieveAllUsers(){
-        return userDaoService.findAllUsers();
-    }
-
     @PostMapping(path = "/customer-registration")
     public String createCustomer(@Valid @RequestBody CustomerRegisterDto customerRegisterDto) {
-        String message = userDaoService.saveNewCustomer(customerRegisterDto);
-        return message;
-    }
-
-    @GetMapping("/find-all-customers")
-    public List<Customer> retrieveAllCustomers(){
-        return userDaoService.findAllCustomers();
+        return userDaoService.saveNewCustomer(customerRegisterDto);
     }
 
     @PostMapping(path = "/seller-registration")
     public String createSeller(@Valid @RequestBody SellerRegisterDto sellerRegisterDto) {
-        String message = userDaoService.saveNewSeller(sellerRegisterDto);
-        return message;
+        return userDaoService.saveNewSeller(sellerRegisterDto);
     }
 
-    @GetMapping("/find-all-sellers")
-    public List<Seller> retrieveAllSellers(){
-        return userDaoService.findAllSellers();
+    @PostMapping(path = "/enableSellerAccount/{sellerId}")
+    public String enableSellerAccount(@PathVariable Integer sellerId){
+        return userDaoService.enableSellerAccount(sellerId);
     }
 
     @GetMapping("/confirm-account")
     public String confirmUserAccount(@RequestParam("token")String confirmationToken)
     {
-        String message= userDaoService.confirmUserAccount(confirmationToken);
-        return message;
+        return userDaoService.confirmUserAccount(confirmationToken);
     }
 
 

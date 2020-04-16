@@ -1,5 +1,7 @@
 package com.project.project.services;
 
+import com.project.project.Exceptions.ResourceNotFoundException;
+import com.project.project.Exceptions.UserNotFoundException;
 import com.project.project.entities.Cart;
 import com.project.project.entities.Customer;
 import com.project.project.entities.ProductVariation;
@@ -28,24 +30,41 @@ public class CartDaoService {
     public Cart addToCart(Integer customer_user_id, Cart cart, Integer productVariation_id){
 
         Optional<User> customer = userRepository.findById(customer_user_id);
+        if (customer.isPresent()) {
+            User user = new User();
+            user = customer.get();
 
-        User user=new User();
-        user=customer.get();
+            Customer customer1 = new Customer();
+            customer1 = (Customer) user;
 
-        Customer customer1=new Customer();
-        customer1=(Customer)user;
+            cart.setCustomer(customer1);
 
-        cart.setCustomer(customer1);
+            Optional<ProductVariation> productVariation = productVariationRepository.findById(productVariation_id);
+            if (productVariation.isPresent()) {
+                ProductVariation productVariation1 = new ProductVariation();
+                productVariation1 = productVariation.get();
 
-        Optional<ProductVariation> productVariation= productVariationRepository.findById(productVariation_id);
-        ProductVariation productVariation1= new ProductVariation();
-        productVariation1= productVariation.get();
+                Integer qty = cart.getQuantity();
+                if(qty<productVariation1.getQuantity_available()
+                )
+                {
+                    cart.setProductVariation(productVariation1);
+                    cartRepository.save(cart);
+                    return cart;
+                }
+                else
+                {
+                    throw new ResourceNotFoundException("Ordered Quantity is greater than available stock.");
+                }
+            }
+            else {
+                throw new ResourceNotFoundException("Invalid Product Variation ID");
+            }
 
-        cart.setProductVariation(productVariation1);
-
-        cartRepository.save(cart);
-
-        return cart;
+        }
+        else {
+            throw new UserNotFoundException("Invalid customer ID");
+        }
     }
 
 }

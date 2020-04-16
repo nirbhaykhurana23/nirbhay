@@ -1,5 +1,7 @@
 package com.project.project.services;
 
+import com.project.project.Exceptions.ResourceNotFoundException;
+import com.project.project.Exceptions.UserNotFoundException;
 import com.project.project.entities.*;
 import com.project.project.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,51 +32,63 @@ public class OrderDaoService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Orders addToOrder(Integer customer_user_id, Orders orders, Integer cart_id){
+    public Orders addToOrder(Integer customer_user_id, Orders orders, Integer cart_id) {
 
-        Optional<User> customer = userRepository.findById(customer_user_id);
+        Optional<Cart> cartId = cartRepository.findById(cart_id);
 
-        User user=new User();
-        user=customer.get();
+        if (cartId.isPresent()) {
+            Cart cart = new Cart();
+            cart = cartId.get();
 
-        Customer customer1=new Customer();
-        customer1=(Customer)user;
+            Customer customer = cart.getCustomer();
 
-        orders.setCustomer(customer1);
+            orders.setCustomer(customer);
 
-        Address address= new Address();
-        String address_label= orders.getCustomer_address_label();
-        Optional<Address> address1= addressRepository.findByAdd(address_label, customer_user_id);
-        address= address1.get();
+            Address address = new Address();
+            String address_label = orders.getCustomer_address_label();
+            Optional<Address> address1 = addressRepository.findByAdd(address_label, customer_user_id);
+            if (address1.isPresent()) {
+                address = address1.get();
 
-        orders.setCustomer_address_address_line(address.getAddress_line());
-        orders.setCustomer_address_city(address.getCity());
-        orders.setCustomer_address_country(address.getCountry());
-        orders.setCustomer_address_state(address.getState());
-        orders.setCustomer_address_zip_code(address.getZip_code());
-        orders.setDate_created(new Date());
+                orders.setCustomer_address_address_line(address.getAddress_line());
+                orders.setCustomer_address_city(address.getCity());
+                orders.setCustomer_address_state(address.getState());
+                orders.setCustomer_address_country(address.getCountry());
+                orders.setCustomer_address_zip_code(address.getZip_code());
+                orders.setDate_created(new Date());
 
-        orderRepository.save(orders);
+            }
+            else {
+                throw new ResourceNotFoundException("Address not found, Check Address Label");
+            }
 
-        Optional<Cart> cartId= cartRepository.findById(cart_id);
-        Cart cart= new Cart();
-        cart= cartId.get();
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setOrder(orders);
+            orderProduct.setProductVariation(cart.getProductVariation());
+            orderProduct.setQuantity(cart.getQuantity());
 
-        OrderProduct orderProduct= new OrderProduct();
-        orderProduct.setOrder(orders);
-        orderProduct.setProductVariation(cart.getProductVariation());
-        orderProduct.setQuantity(cart.getQuantity());
+            ProductVariation product_variation = cart.getProductVariation();
 
-        ProductVariation product_variation= cart.getProductVariation();
+            orderProduct.setPrice(product_variation.getPrice());
 
-        orderProduct.setPrice(product_variation.getPrice());
+            Integer amount = orderProduct.getPrice() * cart.getQuantity();
+            orders.setAmount_paid(amount);
 
-        Integer amount= orderProduct.getPrice() * cart.getQuantity();
-        orders.setAmount_paid(amount);
+            Integer originalqty = product_variation.getQuantity_available();
+            Integer reducedqty = cart.getQuantity();
 
-        orderProductRepository.save(orderProduct);
+            product_variation.setQuantity_available(originalqty-reducedqty);
 
-        return orders;
+            productVariationRepository.save(product_variation);
+            orderProductRepository.save(orderProduct);
+            orderRepository.save(orders);
+
+            return orders;
+        }
+         else {
+            throw new ResourceNotFoundException("Invalid Cart ID");
+         }
+
     }
 
 }

@@ -1,7 +1,9 @@
 package com.project.project.controller;
 
+import com.project.project.entities.Customer;
 import com.project.project.entities.Orders;
 import com.project.project.services.OrderDaoService;
+import com.project.project.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +17,15 @@ public class OrderController {
     @Autowired
     private OrderDaoService orderDaoService;
 
-    @PostMapping("/order/{customer_user_id}/{cart_id}")
-    public void addToOrder(@PathVariable Integer customer_user_id, @RequestBody Orders orders, @PathVariable Integer cart_id){
+    @Autowired
+    private UserDaoService userDaoService;
+
+    @PostMapping("/order/{cart_id}")
+    public void addToOrder(@RequestBody Orders orders, @PathVariable Integer cart_id){
+
+        Customer customer = userDaoService.getLoggedInCustomer();
+        Integer customer_user_id = customer.getUser_id();
+
         Orders orders1= orderDaoService.addToOrder(customer_user_id, orders, cart_id);
     }
 

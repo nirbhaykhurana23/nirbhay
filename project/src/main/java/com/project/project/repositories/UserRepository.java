@@ -12,12 +12,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
 
-    @Query("from Customer")
-    List<Customer> findCustomers();
-
-    @Query("from Seller")
-    List<Seller> findSellers();
-
     User findByUsername(String username);
 
     User findByEmailIgnoreCase(String email);
