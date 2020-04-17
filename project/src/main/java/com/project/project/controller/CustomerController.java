@@ -1,7 +1,7 @@
 package com.project.project.controller;
 
-import com.project.project.dto.AddressDto;
-import com.project.project.dto.CustomerUpdateDto;
+import com.project.project.Model.AddressModel;
+import com.project.project.Model.CustomerUpdateModel;
 import com.project.project.entities.Customer;
 import com.project.project.services.CustomerDaoService;
 import com.project.project.services.UserDaoService;
@@ -29,11 +29,11 @@ public class CustomerController {
     }
 
     @PatchMapping ("/updateCustomerProfile")
-    public String updateCustomerDetails(@RequestBody CustomerUpdateDto customerUpdateDto, HttpServletResponse response){
+    public String updateCustomerDetails(@RequestBody CustomerUpdateModel customerUpdateModel, HttpServletResponse response){
         Customer customer1 = userDaoService.getLoggedInCustomer();
         Integer id = customer1.getUser_id();
 
-        String message = customerDaoService.updateCustomer(customerUpdateDto,id);
+        String message = customerDaoService.updateCustomer(customerUpdateModel,id);
         if (!message.equals("Profile updated successfully")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return "Error";
@@ -49,12 +49,12 @@ public class CustomerController {
     }
 
     @PostMapping("/addCustomerAddress")
-    public String addCustomerAddress(@RequestBody AddressDto addressDto, HttpServletResponse response)
+    public String addCustomerAddress(@RequestBody AddressModel addressModel, HttpServletResponse response)
     {
         Customer customer1 = userDaoService.getLoggedInCustomer();
         Integer id = customer1.getUser_id();
 
-        String message = customerDaoService.addAddress(addressDto,id);
+        String message = customerDaoService.addAddress(addressModel,id);
         if (!message.equals("Address added")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -75,11 +75,11 @@ public class CustomerController {
     }
 
     @PutMapping("/updateCustomerAddress/{address_id}")
-    public String updateCustomerAddress(@RequestBody AddressDto addressDto, @PathVariable Integer address_id, HttpServletResponse response)
+    public String updateCustomerAddress(@RequestBody AddressModel addressModel, @PathVariable Integer address_id, HttpServletResponse response)
     {
         Customer customer1 = userDaoService.getLoggedInCustomer();
 
-        String message = customerDaoService.updateAddress(addressDto,address_id);
+        String message = customerDaoService.updateAddress(addressModel,address_id);
         if (!message.equals("Address updated")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

@@ -1,6 +1,6 @@
 package com.project.project.controller;
 
-import com.project.project.dto.ProductReviewDto;
+import com.project.project.Model.ProductReviewModel;
 import com.project.project.entities.Customer;
 import com.project.project.services.ProductReviewService;
 import com.project.project.services.UserDaoService;
@@ -22,12 +22,12 @@ public class ProductReviewController {
     private UserDaoService userDaoService;
 
     @PostMapping("add-review/{product_id}")
-    public String addReview(@Valid @RequestBody ProductReviewDto productReviewDto, @PathVariable Integer product_id){
+    public String addReview(@Valid @RequestBody ProductReviewModel productReviewModel, @PathVariable Integer product_id){
 
         Customer customer = userDaoService.getLoggedInCustomer();
         Integer customer_user_id = customer.getUser_id();
 
-        String msg= productReviewService.addReview(productReviewDto, customer_user_id, product_id);
+        String msg= productReviewService.addReview(productReviewModel, customer_user_id, product_id);
         return msg;
     }
 }

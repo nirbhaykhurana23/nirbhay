@@ -1,4 +1,4 @@
-package com.project.project.dto;
+package com.project.project.Model;
 
 import com.project.project.validations.PasswordMatches;
 import com.project.project.validations.Password;
@@ -6,7 +6,7 @@ import com.project.project.validations.Password;
 import javax.validation.constraints.NotNull;
 
 @PasswordMatches
-public class ForgotPasswordDto {
+public class ForgotPasswordModel {
 
     @NotNull
     @Password

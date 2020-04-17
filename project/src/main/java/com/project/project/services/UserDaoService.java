@@ -2,8 +2,8 @@ package com.project.project.services;
 
 import com.project.project.Exceptions.TokenExpiredException;
 import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.CustomerRegisterDto;
-import com.project.project.dto.SellerRegisterDto;
+import com.project.project.Model.CustomerRegisterModel;
+import com.project.project.Model.SellerRegisterModel;
 import com.project.project.entities.*;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.RoleRepository;
@@ -63,16 +63,16 @@ public class UserDaoService{
 
     }
 
-    public String saveNewCustomer(CustomerRegisterDto customerRegisterDto) {
+    public String saveNewCustomer(CustomerRegisterModel customerRegisterModel) {
 
-        User existingUser = userRepository.findByEmailIgnoreCase(customerRegisterDto.getEmail());
+        User existingUser = userRepository.findByEmailIgnoreCase(customerRegisterModel.getEmail());
         if(existingUser != null)
         {
             return "This email already exists";
         }
         else {
             ModelMapper modelMapper = new ModelMapper();
-            Customer customer= modelMapper.map(customerRegisterDto, Customer.class);
+            Customer customer= modelMapper.map(customerRegisterModel, Customer.class);
 
             String password=customer.getPassword();
             customer.setPassword(passwordEncoder.encode(password));
@@ -112,9 +112,9 @@ public class UserDaoService{
         }
     }
 
-    public String saveNewSeller(SellerRegisterDto sellerRegisterDto) {
+    public String saveNewSeller(SellerRegisterModel sellerRegisterModel) {
 
-        User existingUser = userRepository.findByEmailIgnoreCase(sellerRegisterDto.getEmail());
+        User existingUser = userRepository.findByEmailIgnoreCase(sellerRegisterModel.getEmail());
         if(existingUser != null)
         {
             return "This email already exists";
@@ -122,7 +122,7 @@ public class UserDaoService{
         else {
 
             ModelMapper modelMapper = new ModelMapper();
-            Seller seller= modelMapper.map(sellerRegisterDto, Seller.class);
+            Seller seller= modelMapper.map(sellerRegisterModel, Seller.class);
 
             String password=seller.getPassword();
             seller.setPassword(passwordEncoder.encode(password));
@@ -145,18 +145,6 @@ public class UserDaoService{
             seller.setIs_nonLocked(true);
 
             userRepository.save(seller);
-
-            /*ConfirmationToken confirmationToken = new ConfirmationToken(seller);
-
-            confirmationTokenRepository.save(confirmationToken);
-
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(seller.getEmail());
-            mailMessage.setSubject("Complete Registration");
-            mailMessage.setText("To activate your account, please click here : "
-                    +"http://localhost:8080/confirm-account?token="+confirmationToken.getConfirmationToken());
-
-            emailSenderService.sendEmail(mailMessage);*/
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(seller.getEmail());

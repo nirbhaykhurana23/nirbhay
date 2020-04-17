@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.project.project.Exceptions.ResourceNotFoundException;
 import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.AddressDto;
-import com.project.project.dto.CustomerUpdateDto;
+import com.project.project.Model.AddressModel;
+import com.project.project.Model.CustomerUpdateModel;
 import com.project.project.entities.Address;
 import com.project.project.entities.Customer;
 import com.project.project.entities.User;
@@ -55,29 +55,29 @@ public class CustomerDaoService {
 
     @Transactional
     @Modifying
-    public String updateCustomer(CustomerUpdateDto customerUpdateDto, Integer id){
+    public String updateCustomer(CustomerUpdateModel customerUpdateModel, Integer id){
         Optional<Customer> customer = customerRepository.findById(id);
 
         if (customer.isPresent()){
             Customer customer1= customer.get();
 
-            if (customerUpdateDto.getUsername() != null)
-                customer1.setUsername(customerUpdateDto.getUsername());
+            if (customerUpdateModel.getUsername() != null)
+                customer1.setUsername(customerUpdateModel.getUsername());
 
-            if(customerUpdateDto.getFirstName() != null)
-                customer1.setFirstName(customerUpdateDto.getFirstName());
+            if(customerUpdateModel.getFirstName() != null)
+                customer1.setFirstName(customerUpdateModel.getFirstName());
 
-            if(customerUpdateDto.getMiddleName() != null)
-                customer1.setMiddleName(customerUpdateDto.getMiddleName());
+            if(customerUpdateModel.getMiddleName() != null)
+                customer1.setMiddleName(customerUpdateModel.getMiddleName());
 
-            if(customerUpdateDto.getLastName() != null)
-                customer1.setLastName(customerUpdateDto.getLastName());
+            if(customerUpdateModel.getLastName() != null)
+                customer1.setLastName(customerUpdateModel.getLastName());
 
-            if(customerUpdateDto.getContact() != null)
-                customer1.setContact(customerUpdateDto.getContact());
+            if(customerUpdateModel.getContact() != null)
+                customer1.setContact(customerUpdateModel.getContact());
 
-            if (customerUpdateDto.getEmail() != null)
-                customer1.setEmail(customerUpdateDto.getEmail());
+            if (customerUpdateModel.getEmail() != null)
+                customer1.setEmail(customerUpdateModel.getEmail());
 
             customerRepository.save(customer1);
             return "Profile updated successfully";
@@ -99,18 +99,18 @@ public class CustomerDaoService {
 
     @Transactional
     @Modifying
-    public String addAddress(AddressDto addressDto, Integer id){
+    public String addAddress(AddressModel addressModel, Integer id){
 
         Optional<User> user = userRepository.findById(id);
         User user1= user.get();
 
         Address address = new Address();
-        address.setAddress_line(addressDto.getAddress_line());
-        address.setCity(addressDto.getCity());
-        address.setState(addressDto.getState());
-        address.setCountry(addressDto.getCountry());
-        address.setZip_code(addressDto.getZip_code());
-        address.setLabel(addressDto.getLabel());
+        address.setAddress_line(addressModel.getAddress_line());
+        address.setCity(addressModel.getCity());
+        address.setState(addressModel.getState());
+        address.setCountry(addressModel.getCountry());
+        address.setZip_code(addressModel.getZip_code());
+        address.setLabel(addressModel.getLabel());
         address.setUser(user1);
         addressRepository.save(address);
         return "Address added";
@@ -132,29 +132,29 @@ public class CustomerDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressDto addressDto ,Integer addressId){
+    public  String updateAddress(AddressModel addressModel, Integer addressId){
         Optional<Address> address = addressRepository.findById(addressId);
 
         if (address.isPresent()){
             Address savedAddress= address.get();
 
-            if(addressDto.getAddress_line() != null)
-                savedAddress.setAddress_line(addressDto.getAddress_line());
+            if(addressModel.getAddress_line() != null)
+                savedAddress.setAddress_line(addressModel.getAddress_line());
 
-            if(addressDto.getCity() != null)
-                savedAddress.setCity(addressDto.getCity());
+            if(addressModel.getCity() != null)
+                savedAddress.setCity(addressModel.getCity());
 
-            if(addressDto.getState() != null)
-                savedAddress.setState(addressDto.getState());
+            if(addressModel.getState() != null)
+                savedAddress.setState(addressModel.getState());
 
-            if(addressDto.getCountry() != null)
-                savedAddress.setCountry(addressDto.getCountry());
+            if(addressModel.getCountry() != null)
+                savedAddress.setCountry(addressModel.getCountry());
 
-            if(addressDto.getZip_code() != null)
-                savedAddress.setZip_code(addressDto.getZip_code());
+            if(addressModel.getZip_code() != null)
+                savedAddress.setZip_code(addressModel.getZip_code());
 
-            if(addressDto.getLabel() != null)
-                savedAddress.setLabel(addressDto.getLabel());
+            if(addressModel.getLabel() != null)
+                savedAddress.setLabel(addressModel.getLabel());
 
             return "Address updated";
         }

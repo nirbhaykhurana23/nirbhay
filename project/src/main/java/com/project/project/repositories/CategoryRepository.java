@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends CrudRepository<Category, Integer> {
+public interface CategoryRepository extends CrudRepository<Category, Long> {
 
     Optional<Category> findByName(String name);
 

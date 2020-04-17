@@ -1,22 +1,17 @@
 package com.project.project.controller;
 
-import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.CustomerRegisterDto;
-import com.project.project.dto.SellerRegisterDto;
-import com.project.project.entities.*;
+import com.project.project.Model.CustomerRegisterModel;
+import com.project.project.Model.SellerRegisterModel;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.UserRepository;
-import com.project.project.services.AccountUnlockService;
 import com.project.project.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.List;
 
 
 @RestController
@@ -66,13 +61,13 @@ public class UserController {
     }
 
     @PostMapping(path = "/customer-registration")
-    public String createCustomer(@Valid @RequestBody CustomerRegisterDto customerRegisterDto) {
-        return userDaoService.saveNewCustomer(customerRegisterDto);
+    public String createCustomer(@Valid @RequestBody CustomerRegisterModel customerRegisterModel) {
+        return userDaoService.saveNewCustomer(customerRegisterModel);
     }
 
     @PostMapping(path = "/seller-registration")
-    public String createSeller(@Valid @RequestBody SellerRegisterDto sellerRegisterDto) {
-        return userDaoService.saveNewSeller(sellerRegisterDto);
+    public String createSeller(@Valid @RequestBody SellerRegisterModel sellerRegisterModel) {
+        return userDaoService.saveNewSeller(sellerRegisterModel);
     }
 
     @PostMapping(path = "/enableSellerAccount/{sellerId}")

@@ -2,7 +2,7 @@ package com.project.project.services;
 
 import com.project.project.Exceptions.TokenExpiredException;
 import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.ForgotPasswordDto;
+import com.project.project.Model.ForgotPasswordModel;
 import com.project.project.tokens.ResetPasswordToken;
 import com.project.project.entities.User;
 import com.project.project.repositories.ResetPasswordRepository;
@@ -57,7 +57,7 @@ public class ForgotPasswordService {
     }
 
     @Transactional
-    public String updatePassword(String resetToken, ForgotPasswordDto forgotPasswordDto){
+    public String updatePassword(String resetToken, ForgotPasswordModel forgotPasswordModel){
         ResetPasswordToken resetPasswordToken= resetPasswordRepository.findByToken(resetToken);
         if(resetPasswordToken==null) {
             throw new TokenExpiredException("Invalid Token");
@@ -72,7 +72,7 @@ public class ForgotPasswordService {
         else {
             User user = userRepository.findByEmailIgnoreCase(resetPasswordToken.getUser().getEmail());
 
-            String pass = forgotPasswordDto.getPassword();
+            String pass = forgotPasswordModel.getPassword();
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             user.setPassword(passwordEncoder.encode(pass));
 

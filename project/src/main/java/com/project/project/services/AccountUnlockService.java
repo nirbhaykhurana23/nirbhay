@@ -6,6 +6,7 @@ import com.project.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class AccountUnlockService {
@@ -32,6 +33,7 @@ public class AccountUnlockService {
         return "Mail has been sent to you. Click on link to unlock your account";
     }
 
+    @Transactional
     public String unlockAccountSuccess(String username){
 
         User user=userRepository.findByUsername(username);

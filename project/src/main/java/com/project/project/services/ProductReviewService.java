@@ -2,7 +2,7 @@ package com.project.project.services;
 
 import com.project.project.Exceptions.ResourceNotFoundException;
 import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.ProductReviewDto;
+import com.project.project.Model.ProductReviewModel;
 import com.project.project.entities.*;
 import com.project.project.repositories.ProductRepository;
 import com.project.project.repositories.ProductReviewRepository;
@@ -25,7 +25,7 @@ public class ProductReviewService {
     @Autowired
     private ProductRepository productRepository;
 
-    public String addReview(ProductReviewDto productReviewDto, Integer customer_user_id, Integer product_id){
+    public String addReview(ProductReviewModel productReviewModel, Integer customer_user_id, Integer product_id){
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         Optional<Product> product= productRepository.findById(product_id);
@@ -44,7 +44,7 @@ public class ProductReviewService {
             customer1=(Customer)user;
 
             ModelMapper modelMapper = new ModelMapper();
-            ProductReview productReview= modelMapper.map(productReviewDto, ProductReview.class);
+            ProductReview productReview= modelMapper.map(productReviewModel, ProductReview.class);
 
             productReview.setCustomer(customer1);
 

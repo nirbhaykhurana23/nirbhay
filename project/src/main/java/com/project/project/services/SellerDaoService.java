@@ -5,11 +5,9 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.project.project.Exceptions.ResourceNotFoundException;
 import com.project.project.Exceptions.UserNotFoundException;
-import com.project.project.dto.AddressDto;
-import com.project.project.dto.CustomerUpdateDto;
-import com.project.project.dto.SellerUpdateDto;
+import com.project.project.Model.AddressModel;
+import com.project.project.Model.SellerUpdateModel;
 import com.project.project.entities.Address;
-import com.project.project.entities.Customer;
 import com.project.project.entities.Seller;
 import com.project.project.repositories.AddressRepository;
 import com.project.project.repositories.SellerRepository;
@@ -49,35 +47,35 @@ public class SellerDaoService {
 
     @Transactional
     @Modifying
-    public String updateSeller(SellerUpdateDto sellerUpdateDto, Integer id){
+    public String updateSeller(SellerUpdateModel sellerUpdateModel, Integer id){
         Optional<Seller> seller = sellerRepository.findById(id);
 
         if (seller.isPresent()){
             Seller seller1= seller.get();
 
-            if (sellerUpdateDto.getUsername() != null)
-                seller1.setUsername(sellerUpdateDto.getUsername());
+            if (sellerUpdateModel.getUsername() != null)
+                seller1.setUsername(sellerUpdateModel.getUsername());
 
-            if(sellerUpdateDto.getFirstName() != null)
-                seller1.setFirstName(sellerUpdateDto.getFirstName());
+            if(sellerUpdateModel.getFirstName() != null)
+                seller1.setFirstName(sellerUpdateModel.getFirstName());
 
-            if(sellerUpdateDto.getMiddleName() != null)
-                seller1.setMiddleName(sellerUpdateDto.getMiddleName());
+            if(sellerUpdateModel.getMiddleName() != null)
+                seller1.setMiddleName(sellerUpdateModel.getMiddleName());
 
-            if(sellerUpdateDto.getLastName() != null)
-                seller1.setLastName(sellerUpdateDto.getLastName());
+            if(sellerUpdateModel.getLastName() != null)
+                seller1.setLastName(sellerUpdateModel.getLastName());
 
-            if (sellerUpdateDto.getEmail() != null)
-                seller1.setEmail(sellerUpdateDto.getEmail());
+            if (sellerUpdateModel.getEmail() != null)
+                seller1.setEmail(sellerUpdateModel.getEmail());
 
-            if(sellerUpdateDto.getGst() != null)
-                seller1.setGst(sellerUpdateDto.getGst());
+            if(sellerUpdateModel.getGst() != null)
+                seller1.setGst(sellerUpdateModel.getGst());
 
-            if (sellerUpdateDto.getCompany_name() != null)
-                seller1.setCompany_name(sellerUpdateDto.getCompany_name());
+            if (sellerUpdateModel.getCompany_name() != null)
+                seller1.setCompany_name(sellerUpdateModel.getCompany_name());
 
-            if (sellerUpdateDto.getCompany_contact() != null)
-                seller1.setCompany_contact(sellerUpdateDto.getCompany_contact());
+            if (sellerUpdateModel.getCompany_contact() != null)
+                seller1.setCompany_contact(sellerUpdateModel.getCompany_contact());
 
             sellerRepository.save(seller1);
             return "Profile updated successfully";
@@ -89,29 +87,29 @@ public class SellerDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressDto addressDto , Integer addressId){
+    public  String updateAddress(AddressModel addressModel, Integer addressId){
         Optional<Address> address = addressRepository.findById(addressId);
 
         if (address.isPresent()){
             Address savedAddress= address.get();
 
-            if(addressDto.getAddress_line() != null)
-                savedAddress.setAddress_line(addressDto.getAddress_line());
+            if(addressModel.getAddress_line() != null)
+                savedAddress.setAddress_line(addressModel.getAddress_line());
 
-            if(addressDto.getCity() != null)
-                savedAddress.setCity(addressDto.getCity());
+            if(addressModel.getCity() != null)
+                savedAddress.setCity(addressModel.getCity());
 
-            if(addressDto.getState() != null)
-                savedAddress.setState(addressDto.getState());
+            if(addressModel.getState() != null)
+                savedAddress.setState(addressModel.getState());
 
-            if(addressDto.getCountry() != null)
-                savedAddress.setCountry(addressDto.getCountry());
+            if(addressModel.getCountry() != null)
+                savedAddress.setCountry(addressModel.getCountry());
 
-            if(addressDto.getZip_code() != null)
-                savedAddress.setZip_code(addressDto.getZip_code());
+            if(addressModel.getZip_code() != null)
+                savedAddress.setZip_code(addressModel.getZip_code());
 
-            if(addressDto.getLabel() != null)
-                savedAddress.setLabel(addressDto.getLabel());
+            if(addressModel.getLabel() != null)
+                savedAddress.setLabel(addressModel.getLabel());
 
             return "Address updated";
         }

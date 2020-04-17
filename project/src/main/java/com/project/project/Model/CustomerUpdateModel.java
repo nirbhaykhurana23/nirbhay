@@ -1,6 +1,6 @@
-package com.project.project.dto;
+package com.project.project.Model;
 
-public class CustomerUpdateDto {
+public class CustomerUpdateModel {
 
     private String username;
     private String firstName;

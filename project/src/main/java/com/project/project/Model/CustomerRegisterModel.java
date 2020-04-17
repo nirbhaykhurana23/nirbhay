@@ -1,4 +1,4 @@
-package com.project.project.dto;
+package com.project.project.Model;
 
 import com.project.project.entities.Address;
 import com.project.project.validations.Email;
@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @PasswordMatches
-public class CustomerRegisterDto {
+public class CustomerRegisterModel {
 
     @NotNull
     @Column(unique = true)

@@ -1,6 +1,6 @@
-package com.project.project.dto;
+package com.project.project.Model;
 
-public class AddressDto {
+public class AddressModel {
 
     private String city;
     private String state;
