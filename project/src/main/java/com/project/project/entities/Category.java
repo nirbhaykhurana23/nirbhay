@@ -1,13 +1,10 @@
 package com.project.project.entities;
 
-import org.springframework.stereotype.Component;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
 @Entity
 public class Category {
 

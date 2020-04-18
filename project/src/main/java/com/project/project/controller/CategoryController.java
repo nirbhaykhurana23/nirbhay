@@ -1,12 +1,15 @@
 package com.project.project.controller;
 
+import com.project.project.Model.CategoryModel;
 import com.project.project.Model.MetadataFieldValueInsertModel;
 import com.project.project.entities.Category;
+import com.project.project.entities.CategoryMetadataField;
 import com.project.project.services.CategoryDaoService;
 import com.project.project.services.CategoryMetadataFieldService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,13 +22,13 @@ public class CategoryController {
     private CategoryMetadataFieldService categoryMetadataFieldService;
 
     @PostMapping("/save-category")
-    public void saveCategory(@RequestBody Category category){
-        Category category1= categoryDaoService.saveNewCategory(category);
+    public String saveCategory(@Valid @RequestBody CategoryModel categoryModel){
+        return categoryDaoService.saveNewCategory(categoryModel);
     }
 
     @PostMapping("/save-category/{parentCategory}")
-    public void saveSubCategory(@PathVariable String parentCategory, @RequestBody List<Category> subCategory){
-        List<Category> category1= categoryDaoService.saveNewSubCategory(parentCategory, subCategory);
+    public String saveSubCategory(@Valid @PathVariable String parentCategory, @RequestBody List<CategoryModel> subCategories){
+        return categoryDaoService.saveNewSubCategory(parentCategory, subCategories);
     }
 
     @GetMapping("/find-all-categories")
@@ -33,9 +36,24 @@ public class CategoryController {
         return categoryDaoService.findAllCategory();
     }
 
+    @GetMapping("/find-category/{category_id}")
+    public Category findCategory(@PathVariable Long category_id){
+        return categoryDaoService.findCategory(category_id);
+    }
+
+    @PutMapping ("/updateCategory/{category}")
+    public String updateCategory(@RequestBody CategoryModel categoryModel, @PathVariable String category){
+        return categoryDaoService.updateCategory(categoryModel, category);
+    }
+
     @PostMapping("/metadata-fields/add")
     public String addMetaDataField(@RequestParam String fieldName) {
         return categoryMetadataFieldService.addNewMetadataField(fieldName);
+    }
+
+    @GetMapping("/find-all-metadata-fields")
+    public List<CategoryMetadataField> findAllMetadataFields(){
+        return categoryMetadataFieldService.findAllMetadataFields();
     }
 
     @PostMapping("/metadata-fields/addValues/{categoryId}/{metaFieldId}")

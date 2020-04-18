@@ -45,8 +45,7 @@ public class CartDaoService {
                 productVariation1 = productVariation.get();
 
                 Integer qty = cart.getQuantity();
-                if(qty<productVariation1.getQuantity_available()
-                )
+                if(qty<productVariation1.getQuantity_available())
                 {
                     cart.setProductVariation(productVariation1);
                     cartRepository.save(cart);

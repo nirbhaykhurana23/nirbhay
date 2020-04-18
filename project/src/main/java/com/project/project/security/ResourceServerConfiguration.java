@@ -77,7 +77,10 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
                 .antMatchers("/confirm-account").permitAll()
                 .antMatchers("/find-all-categories").permitAll()
+                .antMatchers("/find-category/{category_id}").permitAll()
                 .antMatchers("/find-all-products/{category_name}").permitAll()
+                .antMatchers("/find-all-metadata-fields").hasAnyRole("ADMIN")
+                .antMatchers("/updateCategory/{category}").hasAnyRole("ADMIN")
 
                 .antMatchers("/metadata-fields/*").hasAnyRole("ADMIN")
                 .antMatchers("/save-category").hasAnyRole("ADMIN")

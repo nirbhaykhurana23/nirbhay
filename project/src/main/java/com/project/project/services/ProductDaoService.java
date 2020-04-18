@@ -25,9 +25,6 @@ public class ProductDaoService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    Category category;
-
     public List<Product> saveNewProduct(Integer seller_user_id, List<Product> product, String category_name){
 
         Optional<User> seller=userRepository.findById(seller_user_id);
@@ -40,12 +37,13 @@ public class ProductDaoService {
 
         //product.forEach(e->e.setSeller(seller2));
 
+
         Seller finalSeller = seller2;
         product.forEach(e->e.setSeller(finalSeller));
 
         Optional<Category> category1 = categoryRepository.findByName(category_name);
 
-        category=category1.get();
+        Category category=category1.get();
 
         product.forEach(e->e.setCategory(category));
 

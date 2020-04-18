@@ -2,10 +2,14 @@ package com.project.project.controller;
 
 import com.project.project.Model.CustomerRegisterModel;
 import com.project.project.Model.SellerRegisterModel;
+import com.project.project.entities.Customer;
+import com.project.project.entities.Seller;
 import com.project.project.repositories.ConfirmationTokenRepository;
 import com.project.project.repositories.UserRepository;
 import com.project.project.services.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -29,6 +33,9 @@ public class UserController {
     @Autowired
     private ConfirmationTokenRepository confirmationTokenRepository;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @GetMapping("/")
     public String index(){
         return "index";
@@ -41,12 +48,16 @@ public class UserController {
 
     @GetMapping("/customer/home")
     public String userCustomer(){
-        return "Customer home";
+        Customer customer = userDaoService.getLoggedInCustomer();
+        String name = customer.getFirstName();
+        return messageSource.getMessage("welcome.message",new Object[]{name}, LocaleContextHolder.getLocale());
     }
 
     @GetMapping("/seller/home")
     public String sellerHome(){
-        return "Seller home";
+        Seller seller= userDaoService.getLoggedInSeller();
+        String name= seller.getFirstName();
+        return messageSource.getMessage("welcome.message",new Object[]{name}, LocaleContextHolder.getLocale());
     }
 
     @GetMapping("/doLogout")
