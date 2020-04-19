@@ -132,7 +132,7 @@ public class CustomerDaoService {
 
     @Transactional
     @Modifying
-    public  String updateAddress(AddressModel addressModel, Integer addressId){
+    public  String updateAddress(AddressModel addressModel, Integer addressId, Customer customer){
         Optional<Address> address = addressRepository.findById(addressId);
 
         if (address.isPresent()){

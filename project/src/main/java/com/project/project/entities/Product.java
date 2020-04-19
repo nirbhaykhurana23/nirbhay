@@ -1,14 +1,17 @@
 package com.project.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@JsonFilter("productFilter")
 public class Product{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     private String name;
     private String brand;
@@ -29,11 +32,11 @@ public class Product{
     @JoinColumn(name = "seller_user_id")
     private Seller seller;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

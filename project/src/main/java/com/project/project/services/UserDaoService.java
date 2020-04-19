@@ -148,7 +148,7 @@ public class UserDaoService{
 
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(seller.getEmail());
-            mailMessage.setSubject("Complete Registration");
+            mailMessage.setSubject("Registration Successful");
             mailMessage.setText("Registration successful. Admin will enable your account in some time.");
             emailSenderService.sendEmail(mailMessage);
 
@@ -163,16 +163,20 @@ public class UserDaoService{
             Seller seller1= new Seller();
             seller1= seller.get();
 
-            seller1.setIs_enabled(true);
-            userRepository.save(seller1);
+            if (!seller1.getIs_enabled()){
+                seller1.setIs_enabled(true);
+                userRepository.save(seller1);
 
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(seller1.getEmail());
-            mailMessage.setSubject("Account Enabled");
-            mailMessage.setText("Your account has been enabled by admin.");
-            emailSenderService.sendEmail(mailMessage);
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(seller1.getEmail());
+                mailMessage.setSubject("Account Enabled");
+                mailMessage.setText("Your account has been enabled by admin.");
+                emailSenderService.sendEmail(mailMessage);
 
-            return "Seller enabled successfully";
+                return "Seller enabled successfully";
+            }
+            else
+                return "Seller Already Enabled";
         }
         else
             throw new UserNotFoundException("Seller not found");

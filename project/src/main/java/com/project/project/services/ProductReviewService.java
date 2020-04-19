@@ -25,7 +25,7 @@ public class ProductReviewService {
     @Autowired
     private ProductRepository productRepository;
 
-    public String addReview(ProductReviewModel productReviewModel, Integer customer_user_id, Integer product_id){
+    public String addReview(ProductReviewModel productReviewModel, Integer customer_user_id, Long product_id){
 
         Optional<User> customer = userRepository.findById(customer_user_id);
         Optional<Product> product= productRepository.findById(product_id);

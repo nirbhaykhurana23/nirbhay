@@ -79,7 +79,7 @@ public class CustomerController {
     {
         Customer customer1 = userDaoService.getLoggedInCustomer();
 
-        String message = customerDaoService.updateAddress(addressModel,address_id);
+        String message = customerDaoService.updateAddress(addressModel,address_id, customer1);
         if (!message.equals("Address updated")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }

@@ -10,7 +10,6 @@ import com.project.project.repositories.CartRepository;
 import com.project.project.repositories.ProductVariationRepository;
 import com.project.project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -45,7 +44,7 @@ public class CartDaoService {
                 productVariation1 = productVariation.get();
 
                 Integer qty = cart.getQuantity();
-                if(qty<productVariation1.getQuantity_available())
+                if(qty<productVariation1.getQuantityAvailable())
                 {
                     cart.setProductVariation(productVariation1);
                     cartRepository.save(cart);

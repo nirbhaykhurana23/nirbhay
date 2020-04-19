@@ -63,6 +63,8 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/admin/activate-user/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivate-user/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/enableSellerAccount/{seller_id}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/activateProduct/{pid}").hasAnyRole("ADMIN")
+                .antMatchers("/admin/deactivateProduct/{pid}").hasAnyRole("ADMIN")
 
                 .antMatchers("/customer/profile").hasAnyRole("CUSTOMER")
                 .antMatchers("/updateCustomerProfile").hasAnyRole("CUSTOMER")
@@ -78,14 +80,22 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/confirm-account").permitAll()
                 .antMatchers("/find-all-categories").permitAll()
                 .antMatchers("/find-category/{category_id}").permitAll()
-                .antMatchers("/find-all-products/{category_name}").permitAll()
+                .antMatchers("/find-all-products/{category_name}").hasAnyRole("CUSTOMER","ADMIN")
+                .antMatchers("/product/{product_id}").hasAnyRole("CUSTOMER","ADMIN")
+
                 .antMatchers("/find-all-metadata-fields").hasAnyRole("ADMIN")
                 .antMatchers("/updateCategory/{category}").hasAnyRole("ADMIN")
+
+                .antMatchers("/seller/updateProduct/{pid}").hasAnyRole("SELLER")
+                .antMatchers("/seller/deleteProduct/{pid}").hasAnyRole("SELLER")
+                .antMatchers("/seller/products").hasAnyRole("SELLER")
 
                 .antMatchers("/metadata-fields/*").hasAnyRole("ADMIN")
                 .antMatchers("/save-category").hasAnyRole("ADMIN")
                 .antMatchers("/save-category/{parent_category}").hasAnyRole("ADMIN")
-                .antMatchers("/save-product/category/{category_name}").hasAnyRole("SELLER")
+                .antMatchers("/save-product/{category_name}").hasAnyRole("SELLER")
+                .antMatchers("/save-productVariation/{product_id}").hasAnyRole("SELLER")
+
                 .antMatchers("/add-to-cart/{productVariation_id}").hasAnyRole("CUSTOMER")
                 .antMatchers("/order/{cart_id}").hasAnyRole("CUSTOMER")
                 .antMatchers("/forgot-password").permitAll()

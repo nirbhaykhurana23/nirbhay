@@ -1,6 +1,10 @@
 package com.project.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.project.utils.HashMapConverter;
+
 import javax.persistence.*;
+import java.util.Map;
 
 @Entity
 public class ProductVariation {
@@ -9,10 +13,18 @@ public class ProductVariation {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    private Integer quantity_available;
+    @JsonIgnore
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+    private Integer quantityAvailable;
     private Integer price;
 
     private Boolean is_active;
+
+    @Convert(converter = HashMapConverter.class)
+    private Map<String, Object> productAttributes;
 
     public Integer getId() {
         return id;
@@ -22,12 +34,12 @@ public class ProductVariation {
         this.id = id;
     }
 
-    public Integer getQuantity_available() {
-        return quantity_available;
+    public Integer getQuantityAvailable() {
+        return quantityAvailable;
     }
 
-    public void setQuantity_available(Integer quantity_available) {
-        this.quantity_available = quantity_available;
+    public void setQuantityAvailable(Integer quantityAvailable) {
+        this.quantityAvailable = quantityAvailable;
     }
 
     public Integer getPrice() {
@@ -44,5 +56,21 @@ public class ProductVariation {
 
     public void setIs_active(Boolean is_active) {
         this.is_active = is_active;
+    }
+
+    public Map<String, Object> getProductAttributes() {
+        return productAttributes;
+    }
+
+    public void setProductAttributes(Map<String, Object> productAttributes) {
+        this.productAttributes = productAttributes;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 }

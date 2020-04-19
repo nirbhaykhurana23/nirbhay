@@ -1,14 +1,12 @@
 package com.project.project.services;
 
 import com.project.project.Exceptions.ResourceNotFoundException;
-import com.project.project.Exceptions.UserNotFoundException;
 import com.project.project.entities.*;
 import com.project.project.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,7 +30,7 @@ public class OrderDaoService {
     @Autowired
     private OrderProductRepository orderProductRepository;
 
-    public Orders addToOrder(Integer customer_user_id, Orders orders, Integer cart_id) {
+    public String addToOrder(Integer customer_user_id, Orders orders, Integer cart_id) {
 
         Optional<Cart> cartId = cartRepository.findById(cart_id);
 
@@ -68,22 +66,31 @@ public class OrderDaoService {
             orderProduct.setQuantity(cart.getQuantity());
 
             ProductVariation product_variation = cart.getProductVariation();
+            if (product_variation.getIs_active()) {
+                orderProduct.setPrice(product_variation.getPrice());
 
-            orderProduct.setPrice(product_variation.getPrice());
+                Integer amount = orderProduct.getPrice() * cart.getQuantity();
+                orders.setAmount_paid(amount);
 
-            Integer amount = orderProduct.getPrice() * cart.getQuantity();
-            orders.setAmount_paid(amount);
+                Integer originalqty = product_variation.getQuantityAvailable();
+                Integer orderedqty = cart.getQuantity();
 
-            Integer originalqty = product_variation.getQuantity_available();
-            Integer reducedqty = cart.getQuantity();
+                if (originalqty > orderedqty) {
+                    product_variation.setQuantityAvailable(originalqty - orderedqty);
 
-            product_variation.setQuantity_available(originalqty-reducedqty);
+                    productVariationRepository.save(product_variation);
+                    orderProductRepository.save(orderProduct);
+                    orderRepository.save(orders);
 
-            productVariationRepository.save(product_variation);
-            orderProductRepository.save(orderProduct);
-            orderRepository.save(orders);
-
-            return orders;
+                    return "Order Placed Successfully.";
+                }
+                else {
+                    throw new ResourceNotFoundException("Sorry the Requested quantity is not yet available in warehouse.");
+                }
+            }
+            else {
+                throw new ResourceNotFoundException("Requested variant is unavailable at the moment");
+            }
         }
          else {
             throw new ResourceNotFoundException("Invalid Cart ID");

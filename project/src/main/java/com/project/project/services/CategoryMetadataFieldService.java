@@ -10,7 +10,7 @@ import com.project.project.entities.CategoryMetadataFieldValues;
 import com.project.project.repositories.CategoryMetadataFieldRepository;
 import com.project.project.repositories.CategoryMetadataFieldValuesRepository;
 import com.project.project.repositories.CategoryRepository;
-import com.project.project.utils.StringToMapParser;
+import com.project.project.utils.StringToSetParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +65,7 @@ public class CategoryMetadataFieldService {
 
             for(CategoryMetadataFieldModel fieldValuePair : fieldValueDtos.getFieldValues()){
 
-                String values = StringToMapParser.toCommaSeparatedString(fieldValuePair.getValues());
+                String values = StringToSetParser.toCommaSeparatedString(fieldValuePair.getValues());
 
                 categoryFieldValues.setValue(values);
                 categoryFieldValues.setCategory(category1);

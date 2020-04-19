@@ -21,12 +21,12 @@ public class OrderController {
     private UserDaoService userDaoService;
 
     @PostMapping("/order/{cart_id}")
-    public void addToOrder(@RequestBody Orders orders, @PathVariable Integer cart_id){
+    public String addToOrder(@RequestBody Orders orders, @PathVariable Integer cart_id){
 
         Customer customer = userDaoService.getLoggedInCustomer();
         Integer customer_user_id = customer.getUser_id();
 
-        Orders orders1= orderDaoService.addToOrder(customer_user_id, orders, cart_id);
+        return orderDaoService.addToOrder(customer_user_id, orders, cart_id);
     }
 
 }

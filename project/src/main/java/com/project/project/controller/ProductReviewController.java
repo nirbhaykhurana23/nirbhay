@@ -22,7 +22,7 @@ public class ProductReviewController {
     private UserDaoService userDaoService;
 
     @PostMapping("add-review/{product_id}")
-    public String addReview(@Valid @RequestBody ProductReviewModel productReviewModel, @PathVariable Integer product_id){
+    public String addReview(@Valid @RequestBody ProductReviewModel productReviewModel, @PathVariable Long product_id){
 
         Customer customer = userDaoService.getLoggedInCustomer();
         Integer customer_user_id = customer.getUser_id();
