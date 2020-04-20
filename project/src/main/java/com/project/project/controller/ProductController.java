@@ -53,6 +53,18 @@ public class ProductController {
         return productDaoService.deactivateProduct(pid);
     }
 
+
+    @PatchMapping("/seller/activateProductVariation/{productVariationId}")
+    public String productVariationActivation(@PathVariable Integer productVariationId) {
+        return productDaoService.activateProductVariation(productVariationId);
+    }
+
+    @PatchMapping("/seller/deactivateProductVariation/{productVariationId}")
+    public String productVariationDeactivation(@PathVariable Integer productVariationId) {
+        return productDaoService.deactivateProductVariation(productVariationId);
+    }
+
+
     @GetMapping("/find-all-products/{category_name}")
     public MappingJacksonValue retrieveProductList(@PathVariable String category_name) {
         return productDaoService.retrieveProductList(category_name);
@@ -73,12 +85,12 @@ public class ProductController {
     }
 
     @DeleteMapping("/seller/deleteProduct/{pid}")
-    public ResponseEntity<Object> deleteProduct(@PathVariable Long pid) {
+    public ResponseEntity<Object> deleteProductVariation(@PathVariable Integer pid) {
 
         Seller seller = userDaoService.getLoggedInSeller();
         Integer sellerid = seller.getUser_id();
 
-        String message = productDaoService.deleteProduct(pid, sellerid);
+        String message = productDaoService.deleteProductVariation(pid, sellerid);
 
         return new ResponseEntity<>(message, HttpStatus.ACCEPTED);
     }

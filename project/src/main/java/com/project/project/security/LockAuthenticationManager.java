@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
-@Configuration
+@Component
 public class LockAuthenticationManager implements AuthenticationProvider {
 
     @Autowired
@@ -30,7 +30,6 @@ public class LockAuthenticationManager implements AuthenticationProvider {
     @Autowired
     private EmailSenderService emailService;
 
-    @Transactional
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 

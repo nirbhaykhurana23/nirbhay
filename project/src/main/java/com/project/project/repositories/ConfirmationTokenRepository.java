@@ -15,4 +15,6 @@ public interface ConfirmationTokenRepository extends CrudRepository<Confirmation
     @Modifying
     @Query(value = "delete from confirmation_token where confirmation_token=:token", nativeQuery = true)
     void delConfirmationToken(@Param("token") String token);
+
+    ConfirmationToken findByUser(Integer uid);
 }

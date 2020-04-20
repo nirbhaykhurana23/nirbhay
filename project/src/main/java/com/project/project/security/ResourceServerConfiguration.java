@@ -57,14 +57,19 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/customer/home").hasAnyRole("CUSTOMER")
                 .antMatchers("/seller/home").hasAnyRole("SELLER")
                 .antMatchers("/doLogout").hasAnyRole("ADMIN","CUSTOMER","SELLER")
+                .antMatchers("/resendActivationToken").permitAll()
 
                 .antMatchers("/admin/list-customers").hasAnyRole("ADMIN")
                 .antMatchers("/admin/list-sellers").hasAnyRole("ADMIN")
                 .antMatchers("/admin/activate-user/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivate-user/{uid}").hasAnyRole("ADMIN")
                 .antMatchers("/enableSellerAccount/{seller_id}").hasAnyRole("ADMIN")
+
                 .antMatchers("/admin/activateProduct/{pid}").hasAnyRole("ADMIN")
                 .antMatchers("/admin/deactivateProduct/{pid}").hasAnyRole("ADMIN")
+
+                .antMatchers("/seller/activateProductVariation/{productVariationId}").hasAnyRole("SELLER")
+                .antMatchers("/seller/deactivateProductVariation/{productVariationId}").hasAnyRole("SELLER")
 
                 .antMatchers("/customer/profile").hasAnyRole("CUSTOMER")
                 .antMatchers("/updateCustomerProfile").hasAnyRole("CUSTOMER")
@@ -80,7 +85,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/confirm-account").permitAll()
                 .antMatchers("/find-all-categories").permitAll()
                 .antMatchers("/find-category/{category_id}").permitAll()
-                .antMatchers("/find-all-products/{category_name}").hasAnyRole("CUSTOMER","ADMIN")
+                .antMatchers("/find-all-products/{category_name}").permitAll()
                 .antMatchers("/product/{product_id}").hasAnyRole("CUSTOMER","ADMIN")
 
                 .antMatchers("/find-all-metadata-fields").hasAnyRole("ADMIN")

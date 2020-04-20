@@ -13,7 +13,7 @@ public class ConfirmationToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long tokenId;
+    private Long tokenId;
 
     private String confirmationToken;
 
@@ -39,11 +39,11 @@ public class ConfirmationToken {
         confirmationToken = UUID.randomUUID().toString();
     }
 
-    public long getTokenId() {
+    public Long getTokenId() {
         return tokenId;
     }
 
-    public void setTokenId(long tokenId) {
+    public void setTokenId(Long tokenId) {
         this.tokenId = tokenId;
     }
 

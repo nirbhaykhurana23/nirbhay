@@ -19,9 +19,6 @@ public class ProductModel {
     @NotNull
     private Boolean is_cancellable;
 
-    @NotNull
-    private Boolean is_active;
-
     public String getName() {
         return name;
     }
@@ -62,11 +59,4 @@ public class ProductModel {
         this.is_cancellable = is_cancellable;
     }
 
-    public Boolean getIs_active() {
-        return is_active;
-    }
-
-    public void setIs_active(Boolean is_active) {
-        this.is_active = is_active;
-    }
 }

@@ -24,9 +24,6 @@ public class Bootstrap implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        Optional<User> saved_user=userRepository.findById(1);
-        if(!saved_user.isPresent())
-        {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Role admin=new Role();
             admin.setAuthority("ROLE_ADMIN");
@@ -41,12 +38,11 @@ public class Bootstrap implements ApplicationRunner {
             user.setIs_deleted(false);
             user.setRoles(Arrays.asList(admin));
             userRepository.save(user);
-        }
 
-        Role customer = new Role(2,"ROLE_CUSTOMER");
-        Role seller = new Role(3,"ROLE_SELLER");
+            Role customer = new Role(2,"ROLE_CUSTOMER");
+            Role seller = new Role(3,"ROLE_SELLER");
 
-        roleRepository.save(customer);
-        roleRepository.save(seller);
+            roleRepository.save(customer);
+            roleRepository.save(seller);
     }
 }

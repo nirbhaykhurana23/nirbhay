@@ -15,14 +15,12 @@ public class ForgotPasswordController {
 
     @PostMapping("/forgot-password")
     public String resetPassword(@RequestBody String email){
-        String message = forgotPasswordService.resetUserPassword(email);
-        return message;
+        return forgotPasswordService.resetUserPassword(email);
     }
 
     @PutMapping("/reset-password")
     public String setPassword(@Valid @RequestParam("token") String resetToken, @RequestBody ForgotPasswordModel forgotPasswordModel){
-        String message =forgotPasswordService.updatePassword(resetToken, forgotPasswordModel);
-        return message;
+        return forgotPasswordService.updatePassword(resetToken, forgotPasswordModel);
     }
 
 }

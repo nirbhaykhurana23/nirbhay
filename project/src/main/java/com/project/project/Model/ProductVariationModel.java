@@ -13,9 +13,6 @@ public class ProductVariationModel {
     private Integer price;
 
     @NotNull
-    private Boolean is_active;
-
-    @NotNull
     private Map<String, String> attributes = new LinkedHashMap<>();
 
     public Integer getQuantityAvailable() {
@@ -32,14 +29,6 @@ public class ProductVariationModel {
 
     public void setPrice(Integer price) {
         this.price = price;
-    }
-
-    public Boolean getIs_active() {
-        return is_active;
-    }
-
-    public void setIs_active(Boolean is_active) {
-        this.is_active = is_active;
     }
 
     public Map<String, String> getAttributes() {

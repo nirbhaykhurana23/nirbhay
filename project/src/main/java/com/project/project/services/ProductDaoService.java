@@ -102,7 +102,7 @@ public class ProductDaoService {
                 }
                 else {
                     productVariations.setProduct(product1);
-                    productVariations.setIs_active(true);
+                    productVariations.setIs_active(false);
                     productVariationRepository.save(productVariations);
                     return "Product Variation saved";
                 }
@@ -219,6 +219,72 @@ public class ProductDaoService {
         }
     }
 
+    @Transactional
+    public String activateProductVariation(Integer productVariationId) {
+
+        Optional<ProductVariation> productVariation = productVariationRepository.findById(productVariationId);
+        if (productVariation.isPresent()) {
+            ProductVariation productVariation1 = productVariation.get();
+
+            Product product1= productVariation1.getProduct();
+            Seller seller = product1.getSeller();
+
+            String emailid = seller.getEmail();
+
+            if(!productVariation1.getIs_active())
+            {
+                productVariation1.setIs_active(true);
+                productVariationRepository.save(productVariation1);
+                SimpleMailMessage mailMessage=new SimpleMailMessage();
+                mailMessage.setTo(emailid);
+                mailMessage.setSubject("Product Variation Activated!!");
+                mailMessage.setText("Your product variation has been Activated");
+                emailSenderService.sendEmail((mailMessage));
+                return "Product variation Activated";
+            }
+            else
+            {
+                return "Product variation is already Activated";
+            }
+
+        } else {
+            throw new ResourceNotFoundException("Incorrect Product variation ID");
+        }
+    }
+
+    @Transactional
+    public String deactivateProductVariation(Integer productVariationId) {
+
+        Optional<ProductVariation> productVariation = productVariationRepository.findById(productVariationId);
+        if (productVariation.isPresent()) {
+            ProductVariation productVariation1 = productVariation.get();
+
+            Product product1= productVariation1.getProduct();
+            Seller seller = product1.getSeller();
+
+            String emailid = seller.getEmail();
+
+            if(productVariation1.getIs_active())
+            {
+                productVariation1.setIs_active(false);
+                productVariationRepository.save(productVariation1);
+                SimpleMailMessage mailMessage=new SimpleMailMessage();
+                mailMessage.setTo(emailid);
+                mailMessage.setSubject("Product Variation Deactivated!!");
+                mailMessage.setText("Your product variation has been deactivated");
+                emailSenderService.sendEmail((mailMessage));
+                return "Product variation deactivated";
+            }
+            else
+            {
+                return "Product variation is already deactivated";
+            }
+
+        } else {
+            throw new ResourceNotFoundException("Incorrect Product variation ID");
+        }
+    }
+
 
     public MappingJacksonValue retrieveProductList(String category_name){
         SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("name","brand",
@@ -291,20 +357,13 @@ public class ProductDaoService {
         }
     }
 
-    public String deleteProduct(Long pid, Integer sellerid) {
-        Optional<Product> product = productRepository.findById(pid);
+    public String deleteProductVariation(Integer pid, Integer sellerid) {
+        Optional<ProductVariation> productVariation = productVariationRepository.findById(pid);
 
-        if (product.isPresent()) {
-            Product savedProduct = product.get();
-            Integer s_id = savedProduct.getSeller().getUser_id();
-
-            if (s_id.equals(sellerid)) {
-                productRepository.deleteById(pid);
-                return "Product Deleted Successfully";
-            }
-            else {
-                throw new BadRequestException("Product not associated to current seller");
-            }
+        if (productVariation.isPresent()) {
+            //ProductVariation savedProduct = productVariation.get();
+            productVariationRepository.deleteById(pid);
+            return "Product Deleted Successfully";
         }
         else {
             throw new ResourceNotFoundException("Invalid Product ID");
