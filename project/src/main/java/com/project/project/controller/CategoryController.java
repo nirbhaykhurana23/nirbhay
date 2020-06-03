@@ -27,7 +27,7 @@ public class CategoryController {
     }
 
     @PostMapping("/save-category/{parentCategory}")
-    public String saveSubCategory(@Valid @PathVariable String parentCategory, @RequestBody List<CategoryModel> subCategories){
+    public String saveSubCategory(@Valid @PathVariable String parentCategory, @RequestBody CategoryModel subCategories){
         return categoryDaoService.saveNewSubCategory(parentCategory, subCategories);
     }
 

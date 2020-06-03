@@ -33,14 +33,14 @@ public class CategoryDaoService {
 
     }
 
-    public String saveNewSubCategory(String parentCategory, List<CategoryModel> subCategories){
+    public String saveNewSubCategory(String parentCategory, CategoryModel subCategories){
 
         Optional<Category> parent_Category=categoryRepository.findByName(parentCategory);
 
         if (parent_Category.isPresent()){
             ModelMapper modelMapper = new ModelMapper();
-            Type listType=new TypeToken<List<Category>>(){}.getType();
-            List<Category> subCategories1= modelMapper.map(subCategories, listType);
+//            Type listType=new TypeToken<List<Category>>(){}.getType();
+            Category subCategories1= modelMapper.map(subCategories, Category.class);
 
             Category category=new Category();
             category=parent_Category.get();
@@ -48,10 +48,11 @@ public class CategoryDaoService {
             //category.addSubCategory(subCategories);
 
             Category finalCategory = category;
-            subCategories1.forEach(e->e.setParentCategory(finalCategory));
+//            subCategories1.forEach(e->e.setParentCategory(finalCategory));
+            subCategories1.setParentCategory(finalCategory);
 
-            categoryRepository.saveAll(subCategories1);
-            return "Sub-category saved";
+            categoryRepository.save(subCategories1);
+            return "Child category saved";
         }
         else
             throw new ResourceNotFoundException("Parent Category does not exists");

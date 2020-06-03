@@ -92,7 +92,7 @@ public class UserController {
         return userDaoService.confirmUserAccount(confirmationToken);
     }
 
-    @PostMapping("/resendActivationToken")
+    @PostMapping(path = "/resendActivationToken" ,consumes = "application/json")
     public String resendActivationToken(@RequestBody String email) {
         System.out.println(email);
         return userDaoService.resendActivationToken(email);

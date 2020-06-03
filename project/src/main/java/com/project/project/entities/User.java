@@ -46,7 +46,7 @@ public class User {
     public User(User user){
 
         this.user_id=user.user_id;
-        this.username=user.username;
+        this.username =user.username;
         this.password=user.password;
         this.is_deleted=user.is_deleted;
         this.is_enabled =user.is_enabled;

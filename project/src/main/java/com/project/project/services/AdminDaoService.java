@@ -40,7 +40,7 @@ public class AdminDaoService {
     {
         List<Customer> customers = customerRepository.findAll(PageRequest.of(Integer.parseInt(page), Integer.parseInt(size))).getContent();
 
-        SimpleBeanPropertyFilter filter1=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","firstName","middleName","lastName","email","is_active");
+        SimpleBeanPropertyFilter filter1=SimpleBeanPropertyFilter.filterOutAllExcept("user_id","username", "firstName","middleName","lastName","email","is_active", "is_enabled", "is_nonLocked", "addresses");
 
         FilterProvider filterProvider=new SimpleFilterProvider().addFilter("userFilter",filter1);
 

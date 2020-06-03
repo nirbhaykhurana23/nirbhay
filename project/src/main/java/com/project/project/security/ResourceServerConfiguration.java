@@ -1,9 +1,11 @@
 package com.project.project.security;
 
 
+import com.project.project.CorsFilter.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 @Configuration
 @EnableResourceServer
@@ -46,10 +49,20 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         authenticationManagerBuilder.authenticationProvider(authenticationProvider());
     }
 
+    @Bean
+    CorsFilter corsFilter() {
+        CorsFilter filter = new CorsFilter();
+        return filter;
+    }
+
     @Override
     public void configure(final HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(corsFilter(), SessionManagementFilter.class)
+
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 .antMatchers("/").anonymous()
                 .antMatchers("/customer-registration").anonymous()
                 .antMatchers("/seller-registration").anonymous()
@@ -109,10 +122,16 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/do-unlock").permitAll()
                 .antMatchers("add-review/{product_id}").hasAnyRole("CUSTOMER")
 
+                .antMatchers("/profile/uploadImage/{userId}").permitAll()
+                .antMatchers("/product/uploadImage/{sellerid}/{pid}").hasAnyRole("SELLER")
+                .antMatchers("/product-variant/uploadImage/{sellerid}/{vid}").hasAnyRole("SELLER")
+
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .csrf().disable();
+
     }
+
 }

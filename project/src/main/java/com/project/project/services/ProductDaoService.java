@@ -287,7 +287,7 @@ public class ProductDaoService {
 
 
     public MappingJacksonValue retrieveProductList(String category_name){
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("name","brand",
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name","brand",
                 "description","is_active","is_cancellable","is_returnable","productVariations");
 
         FilterProvider filterProvider = new SimpleFilterProvider().addFilter("productFilter",filter);
@@ -306,7 +306,7 @@ public class ProductDaoService {
 
     public MappingJacksonValue retrieveProduct(Long product_id){
 
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("name","brand",
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("id", "name","brand",
                 "description","is_active","is_cancellable","is_returnable","productVariations");
 
         FilterProvider filterProvider = new SimpleFilterProvider().addFilter("productFilter",filter);
